@@ -21,6 +21,7 @@ fun <T> Array<T>?.isNonEmpty(): Boolean {
  * @param <T>   泛型参数，数组中放置的元素数据类型
  * @return 如果集合不为空返回输出字符串，否则返回""
 </T> */
+@Deprecated("please use splicing method.", ReplaceWith("splicing()"))
 fun <T> Array<T>.string(): String {
     return toString(",")
 }
@@ -33,15 +34,40 @@ fun <T> Array<T>.string(): String {
  * @param separator 分隔符
  * @return 如果集合不为空返回输出字符串，否则返回"null"
 </T> */
+@Deprecated("please use splicing method.", ReplaceWith("splicing(separator)"))
 fun <T> Array<T>.toString(separator: String): String {
-    if (size > 0) {
-        val sb = StringBuilder()
-        for (item in this) {
-            sb.append(item).append(separator)
+    return splicing(separator)
+}
+
+/**
+ * 集合转成String输出
+ *
+ * @param <T>  泛型参数，集合中放置的元素数据类型
+ * @return 如果集合不为空返回输出字符串，否则返回"null"
+ */
+fun <T> Array<T>.splicing(): String {
+    return splicing(",")
+}
+
+/**
+ * 集合转成String输出
+ *
+ * @param <T>       泛型参数，集合中放置的元素数据类型
+ * @param separator 分隔符
+ * @return 如果集合不为空返回输出字符串，否则返回"null"
+ */
+fun <T> Array<T>.splicing(separator: String): String {
+    val sb = StringBuilder()
+    for (index in indices) {
+        val result = this[index]
+        if (result != null) {
+            sb.append(result)
+            if (index < size - 1) {
+                sb.append(separator)
+            }
         }
-        return sb.deleteCharAt(sb.length - 1).toString()
     }
-    return ""
+    return sb.toString()
 }
 
 /**
